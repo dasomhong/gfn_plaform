@@ -1,6 +1,6 @@
 # FinGeo — Global Financial Network Platform
 
-Multi-year research prototype. Source repository: private. Published Pages website and its display data: public.
+Multi-year research prototype. Source repository, published Pages website and display data: public.
 
 Only generated display data are included. No raw source downloads, credentials or local research environment.
 

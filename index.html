@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#002147">
+  <title>FinGeo — Global Financial Network Platform</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="manifest.js" defer></script>
+  <script src="world.js" defer></script>
+  <script src="views.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#visualisation">Skip to visualisation</a>
+  <header class="masthead">
+    <a class="brand" href="./index.html" aria-label="FinGeo Home"><img class="brand-logo" src="assets/fingeo-logo.png" alt="FinGeo"><span>FinGeo<small>Research Observatory</small></span></a>
+    <div class="masthead-title"><h1>Global Financial Network Platform</h1><p>Production, industry connections &amp; international financial positions</p></div>
+    <span class="research-badge"><span></span> Research edition</span>
+  </header>
+
+  <main>
+    <section class="introduction" aria-label="Introduction">
+      <div><p class="eyebrow">A Connected View of the World Economy</p><h2 id="hero-title">Follow the Geography of Financial Relationships</h2><p>Explore observed cross-border connections, compare positions over time, and inspect the sources behind every view.</p></div>
+      <div class="intro-note"><span class="small-label">Reading this platform</span><p>Connections have different meanings across sources. Always read the direction, unit and coverage alongside the map.</p><a href="./data-sources.html">About the data <span aria-hidden="true">↗</span></a></div>
+    </section>
+
+    <nav class="tabs" aria-label="Research theme">
+      <button type="button" class="tab active" data-tab="production" aria-pressed="true"><span>01</span> Financial production &amp; control</button>
+      <button type="button" class="tab" data-tab="industry" aria-pressed="false"><span>02</span> Financial Service Linkages</button>
+      <button type="button" class="tab" data-tab="assets" aria-pressed="false"><span>03</span> Assets &amp; investment</button>
+    </nav>
+
+    <section class="explorer" aria-label="Network explorer">
+      <aside class="controls-panel">
+        <div class="panel-heading"><h2>Explore the network</h2><span class="small-label">Configure</span></div>
+        <label class="field-label" for="layer-select">Relationship</label>
+        <select id="layer-select"></select>
+        <p id="layer-description" class="control-description"></p>
+
+        <label class="field-label" for="country-search">Country or economy</label>
+        <div class="search-wrap"><span aria-hidden="true">⌕</span><input id="country-search" type="search" list="country-options" placeholder="Search a country or ISO code" autocomplete="off" aria-describedby="country-search-help"></div>
+        <datalist id="country-options"></datalist>
+        <div class="country-selection"><span id="selection-label">Global overview</span><button type="button" id="reset-global" class="text-button">Reset global</button></div>
+        <p id="country-search-help" class="sr-only">Choose a country name or enter a three-letter country code, then press Enter. Map countries can also be selected.</p>
+
+        <label class="field-label" for="metric-select">Map Measure</label>
+        <select id="metric-select"></select>
+
+        <div id="industry-field" hidden><label class="field-label" for="industry-select">ICIO industry view</label><select id="industry-select"><option value="all">All industries</option></select><p class="control-description">Industry selection recalculates observed links and totals. Trends remain the all-industry series.</p></div>
+
+        <fieldset class="direction-field"><legend class="field-label">Selected-country links</legend><div class="segmented"><button type="button" data-direction="out" aria-pressed="false">Outgoing</button><button type="button" data-direction="in" aria-pressed="true">Incoming</button></div><p id="direction-description" class="control-description"></p></fieldset>
+
+        <div class="display-control"><label class="field-label" for="edge-limit">Visible connections <output id="edge-limit-value" for="edge-limit">100</output></label><input type="range" id="edge-limit" min="30" max="300" step="10" value="100"><p class="control-description">The strongest connections by absolute value are drawn. All observed links remain in the calculations.</p></div>
+        <div class="source-chip"><span class="small-label">Current source</span><p id="source-label">Loading source information…</p><span id="unit-label"></span></div>
+      </aside>
+
+      <div class="workspace">
+        <div class="time-toolbar">
+          <div class="year-controls"><button type="button" id="play-years" class="icon-button" aria-label="Play available years" title="Play available years">▶</button><div class="year-block"><div><label for="year-slider" class="small-label">Reference year</label><output id="year-label" for="year-slider">—</output></div><input id="year-slider" type="range" min="0" max="0" value="0"><div class="year-endpoints"><span id="year-start">—</span><span id="year-end">—</span></div></div></div>
+          <div class="compare-control"><label for="compare-select" class="small-label">Compare with</label><select id="compare-select"><option value="">No comparison</option></select></div>
+        </div>
+        <p id="year-coverage" class="year-coverage" aria-live="polite"></p>
+
+        <div id="question-layout" class="question-layout">
+        <section id="visualisation" class="visualisation" tabindex="-1" aria-labelledby="view-title">
+          <div class="chart-toolbar"><div><p class="eyebrow" id="view-eyebrow">Global overview</p><h2 id="view-title">Observed relationships</h2></div><div class="segmented view-switch" aria-label="Visualisation view"><button type="button" data-view="map" aria-pressed="true">Map</button><button type="button" data-view="network" aria-pressed="false">Network</button></div></div>
+          <div class="summary-strip" id="summary-strip"></div>
+          <div class="map-stage" id="map-stage"><svg id="network-svg" viewBox="0 0 1060 520" role="img" aria-label="World map of observed financial relationships"></svg><details id="pca-inset" class="pca-inset" hidden><summary>Observed Financial Profiles · PCA</summary><div id="pca-chart"></div><p id="pca-note"></p></details><div id="chart-empty" class="chart-empty" hidden></div><div class="map-tools"><button type="button" id="zoom-in" class="icon-button" aria-label="Zoom in">+</button><button type="button" id="zoom-out" class="icon-button" aria-label="Zoom out">−</button><button type="button" id="zoom-reset" class="icon-button" aria-label="Reset map zoom">↺</button></div><div id="chart-tooltip" class="chart-tooltip" role="status" hidden></div><div id="loading-state" class="loading-state" role="status">Loading observed data…</div></div>
+          <div class="legend-bar"><div id="map-legend" class="map-legend"></div><p id="edge-caption"></p></div>
+          <div id="comparison-note" class="comparison-note" hidden></div>
+          <p class="map-attribution" id="map-attribution"></p>
+        </section>
+        <section id="question-panel" class="detail-card question-panel" hidden><div class="card-heading"><div><p class="eyebrow">Explore This Question</p><h2 id="question-title"></h2></div></div><p id="question-description" class="card-footnote"></p><div id="question-chart"></div></section>
+        </div>
+
+        <section id="coverage-banner" class="coverage-banner" aria-live="polite"></section>
+
+        <div class="detail-grid">
+          <section class="detail-card country-card" aria-labelledby="country-title"><div class="card-heading"><div><p class="eyebrow">Country profile</p><h2 id="country-title">Select a country</h2></div><span id="country-code" class="code-pill">GLOBAL</span></div><div id="country-metrics" class="metrics-grid"></div><p id="country-context" class="muted"></p><div id="account-breakdown"></div></section>
+          <section id="partners-card" class="detail-card" aria-labelledby="partners-title"><div class="card-heading"><div><p class="eyebrow">Observed connections</p><h2 id="partners-title">Leading relationships</h2></div></div><div id="partner-list"></div><p id="partners-note" class="card-footnote"></p></section>
+          <section class="detail-card trend-card" aria-labelledby="trend-title"><div class="card-heading"><div><p class="eyebrow">Time series</p><h2 id="trend-title">Observed relationship totals</h2></div><span id="trend-scope" class="small-label"></span></div><div id="trend-chart"></div><p id="trend-note" class="card-footnote"></p></section>
+          <section class="detail-card concentration-card" aria-labelledby="concentration-title"><div class="card-heading"><div><p class="eyebrow">Relationship Summary</p><h2 id="concentration-title">Concentration &amp; Dependence</h2></div></div><div id="concentration-metrics" class="metrics-grid"></div><div id="concentration-chart"></div><p id="concentration-note" class="card-footnote"></p></section>
+        </div>
+
+        <section id="company-card" class="detail-card" hidden><div class="card-heading"><div><p class="eyebrow">Corporate Evidence</p><h2>Entities &amp; Parent Economies</h2></div></div><div id="company-detail"></div></section>
+
+        <section class="detail-card coverage-card"><details id="source-disclosure"><summary><span id="coverage-title">Coverage &amp; Source Notes</span><span id="validation-status" class="status-pill">Checking Source</span></summary><div id="coverage-detail"></div><details class="definitions"><summary>Relationship Definitions &amp; Interpretation</summary><div id="definition-list"></div></details></details></section>
+      </div>
+    </section>
+
+    <section id="method-notes" class="method-notes"><div style="grid-column:1 / -1"><p>Production links describe production or value-added relationships. Financial links generally describe reported positions or stocks at a point in time. A change in a position is not a transaction flow: valuation, exchange rates, reporting changes and coverage can also contribute.</p><p>Missing observations remain missing. Geographic totals, concentration measures and exploratory groups describe the observed network and depend on coverage. Compare like-for-like sources and read each relationship’s direction.</p><p class="muted">Indirect value-added relationships are not presented until a validated calculation is available.</p></div></section>
+  </main>
+  <footer><a class="footer-brand" href="./index.html">FinGeo</a><p>Global Financial Network Platform <span>·</span> Research use <span>·</span> Values shown in US dollars where applicable</p><a href="#">Back to top ↑</a></footer>
+  <div id="app-status" class="sr-only" role="status" aria-live="polite"></div>
+</body>
+</html>
